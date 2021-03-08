@@ -7,6 +7,8 @@
 # Will compile the authorized_keys files from files in authorized_keys.d/
 # If authorized_keys.d/ doesnt exist, the script will create it and exit
 
+## TEST CHANGE
+
 source "$(dirname "$0")/ft_util_inc_var"
 
 if [ -z "$1" ]
