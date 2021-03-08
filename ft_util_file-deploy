@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# file-deploy Script v1.4 (2021-03-08) Guilaume Hullin
-# OPTION NO-BACKUP can be specified to avoid creating a backup
-
 source "$(dirname "$0")/ft_util_inc_var"
 
 if [ -z "$1" ] || [ -z "$2" ]

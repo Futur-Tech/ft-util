@@ -1,14 +1,5 @@
 #!/usr/bin/env bash
 
-# Credit: https://rumkin.medium.com/how-to-organize-ssh-keys-access-7b822db312a8
-
-# ft_util_sshauth v1.0 (2021-03-07) Guilaume Hullin
-# Usage: ft_util_sshauth "<user>" "<usergroup>"
-# Will compile the authorized_keys files from files in authorized_keys.d/
-# If authorized_keys.d/ doesnt exist, the script will create it and exit
-
-## TEST CHANGE
-
 source "$(dirname "$0")/ft_util_inc_var"
 
 if [ -z "$1" ]

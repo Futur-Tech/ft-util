@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# .BAK file cleaner Script v1.2 (2021-02-21) Guilaume Hullin
-
 source "$(dirname "$0")/ft_util_inc_var"
 
 $S_LOG -s debug -d $S_NAME "Cleaning start ${1}"

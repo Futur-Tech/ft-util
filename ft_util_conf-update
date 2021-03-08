@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Config File Updater Script v1.1 (2021-02-21) Guilaume Hullin
-#Note: comments on the same lines of a variable set in a target conf will be kept inside the target file
-
 source "$(dirname "$0")/ft_util_inc_var"
 
 # $S_LOG -d $S_NAME "Start $S_NAME $*"
