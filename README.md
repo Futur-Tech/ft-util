@@ -1,18 +1,14 @@
 # ft-util
 Library of Scripts for Futur-Tech Devs
 
-## Adding the submodule
+## Install
 
-    git submodule add https://github.com/Futur-Tech/ft-util
+    cd <your_repo>
 
-## Checkout on main branch
+    mkdir ft-util ; cd ft-util ; wget https://raw.githubusercontent.com/Futur-Tech/ft-util/main/deploy_ft_util ; chmod +x deploy_ft_util ; ./deploy_ft_util
 
-    git config -f .gitmodules submodule.DbConnector.branch main
+You can edit which script you need by editing deploy_ft_util
 
-## Useful 
+## Update script
 
-    git config status.submodulesummary 1
-
-## Update Submodule
-
-    git submodule update --remote ft-util
+    ./deploy_ft_util
