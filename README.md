@@ -43,6 +43,8 @@ Option **NO-BACKUP** can be specified to avoid creating a backup
 
 ## ft_util_inc_var
 
+Basic vars used accross Futur-Tech scripts. Also declare log.
+
 > Script dependency:
 > - ft_util_log
 
