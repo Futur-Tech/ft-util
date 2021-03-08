@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+source "$(dirname "$0")/ft_util_inc_var"
+
+while getopts "iu" o; do
+    case "${o}" in
+        i)
+            install=1
+            ;;
+        u)
+            update=1        
+            ;;
+    esac
+done
+
+shift "$((OPTIND - 1))"
+
+PKG_ARR=( "$@" )
+
+if [ $update ]
+then
+    $S_LOG -d $S_NAME "Package list update"
+    apt update &>/dev/null
+    if [ $? != "0" ]
+    then
+        $S_LOG -s crit -d $S_NAME "Error while getting package list update."
+    else
+        $S_LOG -d $S_NAME "Successful package list update."
+    fi
+fi
+
+# This var will increment for each pkg not found BUT will decrement if the package is successfully installed
+NOT_INSTALLED=0
+
+for PKG in "${PKG_ARR[@]}"
+do
+    PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $PKG 2>/dev/null | grep "install ok installed")
+    if [ "" = "$PKG_OK" ]; then        
+        let NOT_INSTALLED++
+
+        if [ $install ]
+        then
+            $S_LOG -d $S_NAME "Missing needed package "$PKG". Setting up $PKG."
+            apt-get -y install $PKG
+            if [ $? != "0" ]
+            then
+                $S_LOG -s crit -d $S_NAME "Failed to install needed packages ("$PKG"). Please fix it and re-run the script."
+            else
+                let NOT_INSTALLED--
+                $S_LOG -d $S_NAME "Successful install of needed packages ("$PKG")."
+            fi
+        fi
+    fi
+done
+
+exit $NOT_INSTALLED
