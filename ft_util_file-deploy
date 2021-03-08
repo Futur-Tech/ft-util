@@ -44,15 +44,6 @@ returncode=255
 
 if [ -d "${TARGET}" ]
 then
-    ### https://catonmat.net/bash-one-liners-explained-part-three (22. Send stdout to one process and stderr to another process)
-    ### https://stackoverflow.com/questions/51410472/bash-wait-for-process-substitution-subshell-to-finish/51410920#51410920
-    # coproc read
-    # rsync -i -ac "${SOURCE%/}/" "${TARGET%/}" 2> >($S_LOG -s err -d $S_NAME -d "$SOURCE_NICE" -i) > >($S_LOG -d $S_NAME -d "$SOURCE_NICE" -i)
-    # returncode=$? # store the exit code of the command
-    # exec {COPROC[1]}>&- 
-    # read -u ${COPROC[0]} 
-    ### command 2> >(stderr_cmd) > >(stdout_cmd)
-    ### The lines around are for waiting subprocess to finish and gather the return code from command
     
     find "${TARGET%/}/" -type f ! -name '*.bak' -delete 2> >($S_LOG -s err -d $S_NAME -d "$SOURCE_NICE" -i) > >($S_LOG -d $S_NAME -d "$SOURCE_NICE" -i)
     returncode=$?
