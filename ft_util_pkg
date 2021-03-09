@@ -5,10 +5,10 @@ source "$(dirname "$0")/ft_util_inc_var"
 while getopts "iu" o; do
     case "${o}" in
         i)
-            install=1
+            install=true
             ;;
         u)
-            update=1        
+            update=true        
             ;;
     esac
 done
@@ -17,7 +17,7 @@ shift "$((OPTIND - 1))"
 
 PKG_ARR=( "$@" )
 
-if [ $update ]
+if [ "$update" = true ]
 then
     $S_LOG -d $S_NAME "Package list update"
     apt update &>/dev/null
@@ -38,7 +38,7 @@ do
     if [ "" = "$PKG_OK" ]; then        
         let NOT_INSTALLED++
 
-        if [ $install ]
+        if [ "$install" = true ]
         then
             $S_LOG -d $S_NAME "Missing needed package "$PKG". Setting up $PKG."
             apt-get -y install $PKG
