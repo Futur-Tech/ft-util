@@ -47,12 +47,6 @@ if [ -z "$SOURCE_CONF" ] || [ -z "$DEST_CONF" ] ; then usage ; fi
 
 conf_update() {
     
-    # Regex match example "export SSH_USER=root"
-    ## Group 1: "export "
-    ## Group 2: "SSH_USER"
-    ## Group 3: "root"
-    regex="(.*\ )([a-zA-Z_][a-zA-Z_0-9]*)=(.*)" 
-    
     local sourceFile="$1"
     local targetFile="$2"
 
@@ -68,20 +62,33 @@ conf_update() {
 
     for step in "${arrSteps[@]}"
     do 
-        if [ "$step" = "replace" ]; then [[ $DRY_RUN ]] ||  > "$targetFile" ; fi # empty the target file
+        # empty the target file
+        if [ "$step" = "replace" ]; then [[ $DRY_RUN ]] ||  > "$targetFile" ; fi
 
+        # if search we loop throught the target
+        # if replace we loop throught the source
         while IFS="" read -r line || [ -n "$line" ]
         do
-            if [[ "$line" =~ \#$regex ]] # matching commented line with "variable=value" inside
-            then
-                if [ "$step" = "replace" ]; then [[ $DRY_RUN ]] || printf '%s\n' "$line" >> "$targetFile" ; fi
-            elif [[ "$line" =~ $regex ]]
-            then
+            # for debug
+            # echo "$line"
 
+            # Regex match example "export SSH_USER=root"
+            ## Group 1: "export "
+            ## Group 2: "SSH_USER"
+            ## Group 3: "root"
+            if [[ "$line" =~ ^([a-zA-Z_0-9]*\ )?([a-zA-Z_]+[a-zA-Z_0-9]*)=(.*) ]]
+            then
+                
+                # for debug
+                # echo "step:$step file:${arrFiles[$step]} group1:${BASH_REMATCH[1]} group2:${BASH_REMATCH[2]} group3:${BASH_REMATCH[3]}"
+
+                # if search step then store pair into array
                 if [ "$step" = "search" ]; then arrConf[${BASH_REMATCH[2]}]=${BASH_REMATCH[3]}; fi
+                
                 if [ "$step" = "replace" ] 
                 then
-                    if [ -n "${arrConf[${BASH_REMATCH[2]}]}" ] #check if variable name is in the array
+                    #check if variable name is in the array
+                    if [ -n "${arrConf[${BASH_REMATCH[2]}]}" ]
                     then 
                         VALUE=${arrConf[${BASH_REMATCH[2]}]}
                         $S_LOG -s debug -d $S_NAME -d "$targetFile" "Kept: ${BASH_REMATCH[2]}=$VALUE"
