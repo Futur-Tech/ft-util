@@ -40,14 +40,17 @@ do
 
         if [ "$install" = true ]
         then
-            $S_LOG -d $S_NAME "Missing needed package "$PKG". Setting up $PKG."
-            apt-get -y install $PKG
-            if [ $? != "0" ]
+            $S_LOG -s warn -d $S_NAME -d "$PKG" "Missing needed package "$PKG". Setting up $PKG."
+            
+            apt-get -qq install $PKG 2> >($S_LOG -s err -d $S_NAME -d "apt-get" -d "$PKG" -i) > >($S_LOG -d $S_NAME -d "apt-get" -d "$PKG" -i)        
+            ERR=$? # store the exit code of the command
+
+            if [ $ERR != "0" ]
             then
-                $S_LOG -s crit -d $S_NAME "Failed to install needed packages ("$PKG"). Please fix it and re-run the script."
+                $S_LOG -s crit -d $S_NAME -d "$PKG" "Failed to install needed packages ("$PKG"). Please fix it and re-run the script."
             else
                 let NOT_INSTALLED--
-                $S_LOG -d $S_NAME "Successful install of needed packages ("$PKG")."
+                $S_LOG -d $S_NAME -d "$PKG" "Successful install of needed packages ("$PKG")."
             fi
         fi
     fi
