@@ -42,7 +42,8 @@ do
         then
             $S_LOG -s warn -d $S_NAME -d "$PKG" "Missing needed package "$PKG". Setting up $PKG."
             
-            apt-get -qq install $PKG 2> >($S_LOG -s err -d $S_NAME -d "apt-get" -d "$PKG" -i) > >($S_LOG -d $S_NAME -d "apt-get" -d "$PKG" -i)        
+            # -o=Dpkg::Use-Pty=0 https://askubuntu.com/a/668859
+            apt-get -qq install -o=Dpkg::Use-Pty=0 $PKG 2> >($S_LOG -s err -d $S_NAME -d "apt-get" -d "$PKG" -i) > >($S_LOG -d $S_NAME -d "apt-get" -d "$PKG" -i)        
             ERR=$? # store the exit code of the command
 
             if [ $ERR != "0" ]
