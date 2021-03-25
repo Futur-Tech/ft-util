@@ -44,12 +44,12 @@ do
             
             # https://linuxhint.com/debian_frontend_noninteractive/
             # https://askubuntu.com/a/668859
-            DEBIAN_FRONTEND=noninteractive
-
-            apt-get -qq install \
+            DEBIAN_FRONTEND=noninteractive \
+                apt-get -qq install \
                 -o Dpkg::Options::="--force-confnew" \
                 -o Dpkg::Use-Pty=0 \
-                $PKG 2> >($S_LOG -s err -d $S_NAME -d "apt-get" -d "$PKG" -i) > >($S_LOG -d $S_NAME -d "apt-get" -d "$PKG" -i)        
+                $PKG \
+                &> >($S_LOG -s debug -d $S_NAME -d "apt-get" -d "$PKG" -i)        
             ERR=$? # store the exit code of the command
 
             if [ $ERR != "0" ]
