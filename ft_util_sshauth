@@ -46,7 +46,7 @@ then
         exit 1
     fi
 
-    echo "# DO NOT MODIFY THIS FILE. Compile it with script ft_util_sshauth !!!" >> ${AUTH_KEYS_FILE}
+    echo "# DO NOT MODIFY THIS FILE. Compile it with script ft_util_sshauth !!!" > ${AUTH_KEYS_FILE}
     cat ${AUTH_KEYS_DIR}/* >> ${AUTH_KEYS_FILE}
     
     chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.ssh
