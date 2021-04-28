@@ -31,7 +31,7 @@ else
     USER_HOME=$(eval echo "~${USER_NAME}")
 fi
 
-SSH_DIR=${USER_HOME}/.ssh/
+SSH_DIR=${USER_HOME}/.ssh
 AUTH_KEYS_DIR=${SSH_DIR}/authorized_keys.d
 AUTH_KEYS_FILE=${SSH_DIR}/authorized_keys
 
