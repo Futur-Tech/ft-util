@@ -42,7 +42,7 @@ then
     if [ ! -d "$AUTH_KEYS_DIR" ]
     then
         mkdir $AUTH_KEYS_DIR
-        $S_LOG -s warn -d $S_NAME "Folder ${$AUTH_KEYS_DIR} has been created. You can now add your public keys there. Exit."
+        $S_LOG -s warn -d $S_NAME "Folder ${AUTH_KEYS_DIR} has been created. You can now add your public keys there. Exit."
         exit 1
     fi
 
