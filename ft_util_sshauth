@@ -46,6 +46,14 @@ then
         exit 1
     fi
 
+    if [ ! "$(ls -A ${AUTH_KEYS_DIR})" ]
+    then
+        $S_LOG -s warn -d $S_NAME "No files in ${AUTH_KEYS_DIR}. Add your public keys there. Exit."
+        exit 2
+    fi
+
+    mv ${AUTH_KEYS_FILE} ${AUTH_KEYS_FILE}.bak
+
     echo "# DO NOT MODIFY THIS FILE. Compile it with script ft_util_sshauth !!!" > ${AUTH_KEYS_FILE}
     cat ${AUTH_KEYS_DIR}/* >> ${AUTH_KEYS_FILE}
     
