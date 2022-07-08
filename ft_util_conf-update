@@ -88,8 +88,21 @@ conf_update() {
                 if [ "$step" = "replace" ] 
                 then
                     #check if variable name is in the array
-                    if [ -n "${arrConf[${BASH_REMATCH[2]}]}" ]
+                    if [ -n "${arrConf[${BASH_REMATCH[2]}]}" ] \
+                        && [ "$RECURSIVE" = true ] && [ "${sourceFile##*/}" = "${targetFile##*/}" ] # This part of the IF statement is to force default value inside "template file" (when on recursive mode)
                     then 
+                        
+                        VALUE=${BASH_REMATCH[3]}
+                        if [ "${arrConf[${BASH_REMATCH[2]}]}" != "${BASH_REMATCH[3]}" ] ; then
+                            VALUE=${BASH_REMATCH[3]}
+                            $S_LOG -s warn -d $S_NAME -d "$targetFile" "(Template) Default: ${BASH_REMATCH[2]}=$VALUE"
+                        else
+                            $S_LOG -s debug -d $S_NAME -d "$targetFile" "(Template) Kept: ${BASH_REMATCH[2]}=$VALUE"
+                            unset arrConf[${BASH_REMATCH[2]}]
+                        fi
+
+                    elif [ -n "${arrConf[${BASH_REMATCH[2]}]}" ]
+                    then
                         VALUE=${arrConf[${BASH_REMATCH[2]}]}
                         $S_LOG -s debug -d $S_NAME -d "$targetFile" "Kept: ${BASH_REMATCH[2]}=$VALUE"
                         unset arrConf[${BASH_REMATCH[2]}]
