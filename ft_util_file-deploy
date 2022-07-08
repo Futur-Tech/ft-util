@@ -18,23 +18,20 @@ fi
 ## BACKUP FILES
 #############################
 
-backup () {    
-    cp "$1" "$1.$(date +\%Y\%m\%d\-\%H\%M\%S).bak"
-    $S_LOG -s debug -d $S_NAME -d "$1" "backup of $1"   
+function backup_file () {    
+    cp "$*" "$*.$(date +\%Y\%m\%d\-\%H\%M\%S).bak"
+    $S_LOG -s debug -d $S_NAME -d "$*" "backup of $*"   
 }
+export -f backup_file
 
-if [ -d "$TARGET" ]
-then
-    for file in ${TARGET%/}/*; do
-        [ -f "$file" ] || break
-        [ "${file##*.}" != "bak" ] || continue # only process files with the same ext than the source    
-        [[ $OPTION == *"NO-BACKUP"* ]] || backup $file
-    done
-elif [ -f "$TARGET" ] 
-then
-    [[ $OPTION == *"NO-BACKUP"* ]] || backup $TARGET
+if [[ $OPTION != *"NO-BACKUP"* ]] ; then
+    if [ -d "$TARGET" ] ; then
+        find "${TARGET%/}/" -type f ! -name '*.bak' | while read file; do backup_file "$file"; done
+
+    elif [ -f "$TARGET" ] ; then
+        backup_file $TARGET
+    fi
 fi
-
 
 #############################
 ## DEPLOY FILES
