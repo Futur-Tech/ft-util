@@ -48,6 +48,14 @@ Basic vars used accross Futur-Tech scripts. Also declare log.
 > Script dependency:
 > - ft_util_log
 
+## ft_util_kerberos
+
+This function will generate a Kerberos ticket for a Domain Username from a keytab file located in the home directory.
+If this script is run as root on a Domain Controller, it can automatically also generate a keytab.
+The following variable will be exported:
+- ft_util_kerberos_sambatool, its value will contain the Kerberos argument needed for the installed version of samba-tool
+- KRB5CCNAME, its value is used to locate the default ticket cache (see "man klist")
+
 ## ft_util_log
 
 Logging script
