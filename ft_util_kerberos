@@ -65,7 +65,7 @@ function get_kerberos_ticket () {
             echo "Required keytab $keytab not found, it needs to be created.
                 Use the following commands from an authorized computer:
                 ssh root@${domain} samba-tool domain exportkeytab --principal=${SETPRINCIPAL} /tmp/exportkeytab
-                scp root@${domain}:/tmp/exportkeytab root@$(hostname --short):$keytab
+                scp -3 root@${domain}:/tmp/exportkeytab root@$(hostname --short):$keytab
                 ssh root@$(hostname --short) chown $(whoami):$(id -gn $(whoami)) $keytab
                 ssh root@$(hostname --short) chmod 400 $keytab
                 ssh root@${domain} rm /tmp/exportkeytab"
