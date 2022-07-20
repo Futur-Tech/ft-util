@@ -5,10 +5,10 @@ source "$(dirname "$0")/ft_util_inc_var"
 $S_LOG -s debug -d $S_NAME "Cleaning start ${1}"
 
 if [ -d "${1}" ] ; then
-    find ${1}* -type f -mtime +7 -name '*.bak' -delete -print | $S_LOG -d $S_NAME -d "deleted" -i
+    find ${1}* -type f -mtime +7 -name '*.bak' -delete -print | $S_LOG -s debug -d $S_NAME -d "deleted" -i
     returncode=$? # store the exit code of the command
 elif [ -f "${1}" ] ; then
-    find ${1}* -maxdepth 0 -type f -mtime +7 -name '*.bak' -delete -print | $S_LOG -d $S_NAME -d "deleted" -i
+    find ${1}* -maxdepth 0 -type f -mtime +7 -name '*.bak' -delete -print | $S_LOG -s debug -d $S_NAME -d "deleted" -i
     returncode=$? # store the exit code of the command
 fi
 
