@@ -36,6 +36,7 @@ Note: comments on the same lines of a variable set in a target conf will be kept
 File deployement... todo: readme
 
 Option **NO-BACKUP** can be specified to avoid creating a backup
+Option **NO-COMPARE** can be specified to avoid showing diff result
 
 > Script dependency:
 > - ft_util_log
