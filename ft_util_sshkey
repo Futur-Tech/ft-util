@@ -2,39 +2,33 @@
 
 source "$(dirname "$0")/ft_util_inc_var"
 
-if [ -z "$1" ]
-then
+if [ -z "$1" ]; then
     $S_LOG -s crit -d $S_NAME "\$1 is empty..."
     exit 1
 else
     USER_NAME="$1"
 fi
 
-if [ -z "$2" ]
-then
+if [ -z "$2" ]; then
     GROUP_NAME="$USER_NAME"
 else
     GROUP_NAME="$2"
 fi
 
-
-if [ "$(whoami)" != "root" ]
-then
+if [ "$(whoami)" != "root" ]; then
     $S_LOG -s crit -d $S_NAME "Please run as root! You are only \"$(whoami)\"."
     exit 2
 fi
 
-if [ ! $(getent passwd ${USER}) ]
-then
+if [ ! $(getent passwd ${USER}) ]; then
     $S_LOG -s crit -d $S_NAME "Sorry \"$USER\" doesn't exist."
     exit 3
 else
     USER_HOME=$(eval echo "~${USER_NAME}")
 fi
 
-if [ ! -e "${USER_HOME}/.ssh/id_rsa.pub" ]
-then
-    
+if [ ! -e "${USER_HOME}/.ssh/id_rsa.pub" ]; then
+
     [ ! -d "${USER_HOME}/.ssh" ] && mkdir "${USER_HOME}/.ssh"
     ssh-keygen -q -f "${USER_HOME}/.ssh/id_rsa" -N "" -t rsa -C ${USER_NAME}@$(hostname)
     [ ! -e "${USER_HOME}/.ssh/authorized_keys" ] && touch "${USER_HOME}/.ssh/authorized_keys"
@@ -45,8 +39,7 @@ then
 
     $S_LOG -s $? -d $S_NAME "Creation of SSH Keys in ${USER_HOME}/.ssh/ EXIT_CODE=$?"
 
-    if [ -e "${USER_HOME}/.ssh/id_rsa.pub" ]
-    then
+    if [ -e "${USER_HOME}/.ssh/id_rsa.pub" ]; then
         PUB_KEY=$(cat ${USER_HOME}/.ssh/id_rsa.pub)
         ID_KEY=$(cat ${USER_HOME}/.ssh/id_rsa.pub | cut -f3 -d " ")
 
@@ -72,7 +65,6 @@ else
     $S_LOG -d $S_NAME "SSH Keys in ${USER_HOME}/.ssh/ are present "
     exit 0
 fi
-
 
 # if [ ! -f "$ZBX_RUN/.ssh/id_rsa" ] || [ ! -f "$ZBX_RUN/.ssh/id_rsa.pub" ]
 # then

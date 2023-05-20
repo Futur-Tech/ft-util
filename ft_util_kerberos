@@ -9,16 +9,18 @@
 #     KRB5CCNAME, its value is used to locate the default ticket cache (see "man klist")
 
 # 1st argument is the Domain Username
-function get_kerberos_ticket () { 
-    if [ -z "${1}" ] ; then echo "Missing Domain Username Argument" ; exit 10 ; fi
+function get_kerberos_ticket() {
+    if [ -z "${1}" ]; then
+        echo "Missing Domain Username Argument"
+        exit 10
+    fi
 
     local domain_username="${1,,}" # domain username is changed to lowercase
     local keytab="$HOME/ft_util_kerberos-${domain_username}.keytab"
     local domain=$(hostname -d)
 
-    local REALM="${domain^^}" # Samba realm
+    local REALM="${domain^^}"                        # Samba realm
     local SETPRINCIPAL="${domain_username}@${REALM}" # Kerberos Principal
-
 
     # Check Samba install
     local BINDIR=$(samba -b | grep 'BINDIR' | grep -v 'SBINDIR' | awk '{print $NF}')
@@ -30,14 +32,14 @@ function get_kerberos_ticket () {
     [[ -z $SAMBATOOL ]] && echo "Cannot find the 'samba-tool' binary, is it installed?"
 
     # Check domain
-    if [ -z "${domain}" ] ; then
+    if [ -z "${domain}" ]; then
         echo "Cannot obtain domain name, is DNS set up correctly?"
         echo "Cannot continue... Exiting."
         exit 1
     fi
 
     # Check if domain_username exist
-    if [ -z "$($WBINFO -u | grep ${domain_username})" ] ; then
+    if [ -z "$($WBINFO -u | grep ${domain_username})" ]; then
         echo "No AD ${domain_username} user exists, need to create it first.. exiting."
         # echo "you can do this by typing the following commands"
         # echo "kinit Administrator@${REALM}"
@@ -48,13 +50,13 @@ function get_kerberos_ticket () {
     fi
 
     # Check for Kerberos keytab
-    if [ ! -f "${keytab}" ] ; then
+    if [ ! -f "${keytab}" ]; then
 
-        # If running as root and server is ADDC, then we can get the keytab    
-        if [ "$(whoami)" = "root" ] && [ "$(samba-tool testparm --suppress-prompt --parameter-name="server role" 2>/dev/null)" = "active directory domain controller" ] ; then
+        # If running as root and server is ADDC, then we can get the keytab
+        if [ "$(whoami)" = "root" ] && [ "$(samba-tool testparm --suppress-prompt --parameter-name="server role" 2>/dev/null)" = "active directory domain controller" ]; then
 
             echo "Keytab missing, but this is a domain controller... we can export keytab"
-            if samba-tool domain exportkeytab --principal=${SETPRINCIPAL} $keytab && chown root:root $keytab && chmod 400 $keytab ; then
+            if samba-tool domain exportkeytab --principal=${SETPRINCIPAL} $keytab && chown root:root $keytab && chmod 400 $keytab; then
                 echo "Keytab exported to $keytab"
             else
                 echo "Failed to export $keytab"
@@ -76,14 +78,14 @@ function get_kerberos_ticket () {
     # krbcc ticket cache
     export KRB5CCNAME="/tmp/ft_util_kerberos-${domain_username}.cc"
 
-    klist -c "${KRB5CCNAME}" -s 
+    klist -c "${KRB5CCNAME}" -s
     err="$?"
-    if [ $err -ne 0 ] ; then
+    if [ $err -ne 0 ]; then
         echo "Getting new ticket, old one has expired"
         # On FreeBSD change the -F to --no-forwardable
         kinit -F -k -t $keytab "${SETPRINCIPAL}"
         err="$?"
-        if [ $err -ne 0 ] ; then
+        if [ $err -ne 0 ]; then
             echo "kinit for ${domain_username} failed"
             exit 1
         else
@@ -93,14 +95,12 @@ function get_kerberos_ticket () {
         echo "${domain_username} ticket is still valid"
     fi
 
-    if [ "$($SAMBATOOL -V | grep -o '[0-9]*' | tr '\n' ' ' | awk '{print $2}')" -gt '14' ] ; then
+    if [ "$($SAMBATOOL -V | grep -o '[0-9]*' | tr '\n' ' ' | awk '{print $2}')" -gt '14' ]; then
         export ft_util_kerberos_sambatool="--use-kerberos=required"
     else
         export ft_util_kerberos_sambatool="-k yes"
     fi
 
-
     return 0
 }
 export -f get_kerberos_ticket
-
