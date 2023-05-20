@@ -23,7 +23,7 @@ function get_kerberos_ticket() {
     local setprincipal="${domain_username}@${realm}" # Kerberos Principal
 
     # Check Samba install
-    local bindir=$(samba -b | grep 'bindir' | grep -v 'Sbindir' | awk '{print $NF}')
+    local bindir=$(samba -b | grep 'BINDIR' | grep -v 'SBINDIR' | awk '{print $NF}')
     [[ -z $bindir ]] && echo "Cannot find the 'samba' binary, is it installed ?"
     local wbinfo="$bindir/wbinfo"
 
