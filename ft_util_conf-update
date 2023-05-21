@@ -132,14 +132,10 @@ if [ "$recursive" = true ]; then
             [ -f "$file" ] || break
             [ "${file##*.}" = "${source_conf##*.}" ] || continue # only process files with the same ext than the source
 
-            $S_LOG -d $S_NAME -d "$file" "========================"
-
             $S_LOG -s debug -d $S_NAME -d "$file" "Create backup of file $file"
             [[ $dry_run ]] || cp "$file" "$file.$(date +\%Y\%m\%d\-\%H\%M\%S).bak"
 
             conf_update "$source_conf" "$file"
-
-            $S_LOG -d $S_NAME -d "$file" "========================"
 
         done
         if [ -z "$(ls -A ${dest_conf})" ]; then
@@ -153,7 +149,7 @@ if [ "$recursive" = true ]; then
     fi
 else
     if [ -f "$dest_conf" ]; then
-        $S_LOG -d $S_NAME -d "$dest_conf" "Create backup of file $dest_conf"
+        $S_LOG -s debug -d $S_NAME -d "$dest_conf" "Create backup of file $dest_conf"
         [[ $dry_run ]] || cp "$dest_conf" "$dest_conf.$(date +\%Y\%m\%d\-\%H\%M\%S).bak"
 
         conf_update "$source_conf" "$dest_conf"
@@ -163,5 +159,3 @@ else
         conf_create
     fi
 fi
-
-$S_LOG -d $S_NAME "End $S_NAME $*"
