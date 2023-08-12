@@ -25,7 +25,7 @@ download_file ft_util_pkg
 download_file ft_util_log
 download_file ft_util_sshauth
 download_file ft_util_sshkey
-
+download_file ft_util_sudoersd
 download_file README.md
 
 chmod +x ${FT_UTIL_DIR}/ft_util_*
