@@ -22,7 +22,7 @@ sudoersd_addto_file() {
     local user="$2"
     local cmd="$3"
     local host="${4:-ALL}"
-    local userrunas="${5:-ALL}"
+    local userrunas="${5:-root}"
     local option="${6:-NOPASSWD}"
 
     if [[ -z "$filename" || -z "$user" || -z "$cmd" ]]; then
