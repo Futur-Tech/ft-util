@@ -37,7 +37,7 @@ enforce_ownership() {
     local group="${2}"
     local user="${3:-root}" # Default user is root if not provided
 
-    run_cmd_log find -path \"${path}\" -exec chown "$user:$group" {} +
+    run_cmd_log find "${path%/*}" -name "${path##*/}*" -exec chown "$user:$group" {} +
 }
 export -f enforce_ownership
 
@@ -47,19 +47,17 @@ enforce_permissions() {
     local path="$2"
 
     if [ "$operation" == "conf" ]; then
-        run_cmd_log find -path \"${path}\" -type d -exec chmod 750 {} +
-        run_cmd_log find -path \"${path}\" -type f -exec chmod 640 {} +
-
+        run_cmd_log find "${path%/*}" -name "${path##*/}*" -type d -exec chmod 750 {} +
+        run_cmd_log find "${path%/*}" -name "${path##*/}*" -type f -exec chmod 640 {} +
     elif [ "$operation" == "exec" ]; then
-        run_cmd_log find -path \"${path}\" -exec chmod 750 {} +
-
+        run_cmd_log find "${path%/*}" -name "${path##*/}*" -type d -exec chmod 750 {} +
+        run_cmd_log find "${path%/*}" -name "${path##*/}*" -type f -exec chmod 750 {} +
     elif [ "$operation" == "secret" ]; then
-        run_cmd_log find -path \"${path}\" -type d -exec chmod 700 {} +
-        run_cmd_log find -path \"${path}\" -type f -exec chmod 600 {} +
+        run_cmd_log find "${path%/*}" -name "${path##*/}*" -type d -exec chmod 700 {} +
+        run_cmd_log find "${path%/*}" -name "${path##*/}*" -type f -exec chmod 600 {} +
     else
         $S_LOG -s err -d "$S_NAME" "Invalid operation: $operation"
         return 1
-
     fi
 }
 export -f enforce_permissions
