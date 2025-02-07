@@ -101,14 +101,14 @@ This script for 2 purposes:
     ft-util/ft_util_pkg "pkg1"
     # (Return 0 if pkg1 is installed)
 
-    ft-util/ft_util_pkg -c
+    ft-util/ft_util_pkg -u
     # Run apt update
 
     ft-util/ft_util_pkg -i "pkg1" "pkg2" "pkg3" "pkg4"
     # Install "pkg1" "pkg2" "pkg3" "pkg4".
     # Return number of packet not installed.
 
-    ft-util/ft_util_pkg -c -i "pkg1" "pkg2" "pkg3" "pkg4"
+    ft-util/ft_util_pkg -u -i "pkg1" "pkg2" "pkg3" "pkg4"
     # Same than the previous exemple but with apt update before.
 
 > Script dependency:
