@@ -13,6 +13,8 @@ You can edit which script you need by editing deploy_ft_util
 
     ./deploy_ft_util
 
+    for d in futur-tech-*; do $d/ft-util/deploy_ft_util ; done
+
 # Scripts Description
 ## ft_util_bak-cleaner
 
