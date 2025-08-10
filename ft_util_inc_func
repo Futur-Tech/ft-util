@@ -139,7 +139,7 @@ export -f mkdir_if_missing
 # show_bak_diff path_to_file
 function show_bak_diff() {
     if [ -e "${1}.bak" ]; then
-        diff --unified=0 "${1}.bak" "${1}" | $S_LOG -s warn -d "$S_NAME" -d "diff ${1}" -i
+        diff --unified=0 "${1}.bak" "${1}" | $S_LOG -s warn -d "$S_NAME" -d "diff ${1}" -i || : # `|| :` is a workaround to "ignore" the return code of 1 from diff when file are different.
     else
         $S_LOG -s warn -d "$S_NAME" -d "diff ${1}" "No bak found (okay for new files)"
     fi
