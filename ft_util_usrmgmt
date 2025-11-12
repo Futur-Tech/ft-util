@@ -92,7 +92,9 @@ enforce_security() {
     local group="${3:-root}" # Default group is root if not provided
     local user="${4:-root}"  # Default user is root if not provided
 
-    run_cmd_silent setfacl --recursive --remove-all \'$path\' # Remove all extended ACL entries
+    # Remove all extended ACL entries on dir
+    [[ "$path" != *"*"* && -d "$path" ]] && run_cmd_silent setfacl --recursive --remove-all \'$path\'
+
     enforce_ownership "$path" "$group" "$user"
     enforce_permissions "$operation" "$path"
 }
